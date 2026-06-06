@@ -1,0 +1,418 @@
+{
+  "config": {
+    "random_seed": 42,
+    "n_samples": 60000,
+    "test_fraction": 0.25,
+    "train_fraction": 0.75,
+    "attack_ratio": 0.3,
+    "n_jobs_classifier": -1,
+    "output_dir": "results",
+    "figures_dir": "results/figures"
+  },
+  "timings_seconds": {
+    "data_generation": 0.036121000011917204,
+    "layer1_ingest": 3.8189953749533743,
+    "ml_fit": 2.9730026249890216,
+    "layer2_llm": 3.5651077919756062,
+    "layer3_routing": 0.031009416037704796
+  },
+  "dataset": {
+    "per_class": [
+      {
+        "Label": "BENIGN",
+        "count": 42000,
+        "share": 0.7
+      },
+      {
+        "Label": "DoS Hulk",
+        "count": 5094,
+        "share": 0.0849
+      },
+      {
+        "Label": "PortScan",
+        "count": 4245,
+        "share": 0.07075
+      },
+      {
+        "Label": "DDoS",
+        "count": 3396,
+        "share": 0.0566
+      },
+      {
+        "Label": "FTP-Patator",
+        "count": 1019,
+        "share": 0.016983333333333333
+      },
+      {
+        "Label": "DoS GoldenEye",
+        "count": 849,
+        "share": 0.01415
+      },
+      {
+        "Label": "SSH-Patator",
+        "count": 679,
+        "share": 0.011316666666666666
+      },
+      {
+        "Label": "Bot",
+        "count": 679,
+        "share": 0.011316666666666666
+      },
+      {
+        "Label": "DoS Slowhttptest",
+        "count": 509,
+        "share": 0.008483333333333334
+      },
+      {
+        "Label": "Web Attack - Brute Force",
+        "count": 509,
+        "share": 0.008483333333333334
+      },
+      {
+        "Label": "DoS slowloris",
+        "count": 509,
+        "share": 0.008483333333333334
+      },
+      {
+        "Label": "Web Attack - XSS",
+        "count": 340,
+        "share": 0.005666666666666667
+      },
+      {
+        "Label": "Web Attack - SQL Injection",
+        "count": 85,
+        "share": 0.0014166666666666668
+      },
+      {
+        "Label": "Infiltration",
+        "count": 68,
+        "share": 0.0011333333333333334
+      },
+      {
+        "Label": "Heartbleed",
+        "count": 19,
+        "share": 0.00031666666666666665
+      }
+    ],
+    "n_rows": 60000,
+    "train_rows": 45000,
+    "test_rows": 15000,
+    "pii_findings": {}
+  },
+  "rule_based": {
+    "binary": {
+      "tp": 2928,
+      "fp": 3955,
+      "fn": 1529,
+      "tn": 6588,
+      "precision": 0.42539590294929536,
+      "recall": 0.65694413282477,
+      "f1": 0.5164021164021164,
+      "fpr": 0.3751304182870151,
+      "fnr": 0.34305586717522996,
+      "roc_auc": 0.7498581458059157
+    },
+    "multiclass": {
+      "macro_precision": 0.12670580803731463,
+      "macro_recall": 0.16588889161719944,
+      "macro_f1": 0.12140618824799455,
+      "weighted_precision": 0.6279634974133302,
+      "weighted_recall": 0.486,
+      "weighted_f1": 0.5413174638618224
+    },
+    "latency": {
+      "mean_ms": 0.015512061064752444,
+      "median_ms": 0.01551206106475244,
+      "p95_ms": 0.01551206106475244,
+      "p99_ms": 0.01551206106475244,
+      "n": 15000
+    },
+    "total_seconds": 0.2326809159712866
+  },
+  "ml_baseline": {
+    "binary": {
+      "tp": 4361,
+      "fp": 39,
+      "fn": 96,
+      "tn": 10504,
+      "precision": 0.9911363636363636,
+      "recall": 0.9784608481041059,
+      "f1": 0.9847578186744949,
+      "fpr": 0.0036991368680641184,
+      "fnr": 0.021539151895894098,
+      "roc_auc": 0.9992301152639411
+    },
+    "multiclass": {
+      "macro_precision": 0.5192570674872393,
+      "macro_recall": 0.5084055600346072,
+      "macro_f1": 0.5128726496890108,
+      "weighted_precision": 0.914997698313758,
+      "weighted_recall": 0.9172666666666667,
+      "weighted_f1": 0.9159527513870095
+    },
+    "latency": {
+      "mean_ms": 0.013091772197124861,
+      "median_ms": 0.01309177219712486,
+      "p95_ms": 0.01309177219712486,
+      "p99_ms": 0.01309177219712486,
+      "n": 15000
+    },
+    "total_seconds": 0.19637658295687288
+  },
+  "shield_ai_full": {
+    "binary": {
+      "tp": 4358,
+      "fp": 44,
+      "fn": 99,
+      "tn": 10499,
+      "precision": 0.9900045433893685,
+      "recall": 0.9777877496073593,
+      "f1": 0.9838582232757648,
+      "fpr": 0.004173385184482595,
+      "fnr": 0.02221225039264079,
+      "roc_auc": 0.9980020494081834
+    },
+    "multiclass": {
+      "macro_precision": 0.5052342587567911,
+      "macro_recall": 0.4905050918444902,
+      "macro_f1": 0.49671492149813484,
+      "weighted_precision": 0.9120859983858489,
+      "weighted_recall": 0.9145333333333333,
+      "weighted_f1": 0.913131948714807
+    },
+    "latency": {
+      "mean_ms": 0.23588598164496943,
+      "median_ms": 0.22387498756870627,
+      "p95_ms": 0.3057961730519309,
+      "p99_ms": 0.4073014145251366,
+      "n": 15000
+    },
+    "gamma_overall": {
+      "mean": 0.5748713849454619,
+      "std": 0.1473069866912657,
+      "p10": 0.255334107631541,
+      "p50": 0.57,
+      "p90": 0.7658374272885244
+    },
+    "gamma_per_class": [
+      {
+        "label": "DDoS",
+        "n": 820,
+        "gamma_mean": 0.8347252202429521,
+        "gamma_std": 0.03391800458014427
+      },
+      {
+        "label": "DoS slowloris",
+        "n": 128,
+        "gamma_mean": 0.8248611098323291,
+        "gamma_std": 0.12005432256333427
+      },
+      {
+        "label": "DoS Slowhttptest",
+        "n": 133,
+        "gamma_mean": 0.8000206305252517,
+        "gamma_std": 0.16115697187498929
+      },
+      {
+        "label": "DoS Hulk",
+        "n": 1273,
+        "gamma_mean": 0.7639755536982749,
+        "gamma_std": 0.0931767666223375
+      },
+      {
+        "label": "DoS GoldenEye",
+        "n": 192,
+        "gamma_mean": 0.6688096777786736,
+        "gamma_std": 0.20229870716630366
+      },
+      {
+        "label": "BENIGN",
+        "n": 10543,
+        "gamma_mean": 0.5697057634918078,
+        "gamma_std": 0.019522229577766694
+      },
+      {
+        "label": "Heartbleed",
+        "n": 4,
+        "gamma_mean": 0.5539709857181689,
+        "gamma_std": 0.2986368780866279
+      },
+      {
+        "label": "Web Attack - XSS",
+        "n": 91,
+        "gamma_mean": 0.5217002627155255,
+        "gamma_std": 0.2695872260833784
+      },
+      {
+        "label": "Web Attack - Brute Force",
+        "n": 139,
+        "gamma_mean": 0.5002236826551962,
+        "gamma_std": 0.25865793304887064
+      },
+      {
+        "label": "Web Attack - SQL Injection",
+        "n": 19,
+        "gamma_mean": 0.47370424218351476,
+        "gamma_std": 0.24899781364203932
+      },
+      {
+        "label": "FTP-Patator",
+        "n": 243,
+        "gamma_mean": 0.3806207615760574,
+        "gamma_std": 0.222862698438903
+      },
+      {
+        "label": "SSH-Patator",
+        "n": 162,
+        "gamma_mean": 0.36674782677544454,
+        "gamma_std": 0.2117979843325394
+      },
+      {
+        "label": "Bot",
+        "n": 171,
+        "gamma_mean": 0.3587376255881917,
+        "gamma_std": 0.1903988655740078
+      },
+      {
+        "label": "Infiltration",
+        "n": 14,
+        "gamma_mean": 0.34065892994200625,
+        "gamma_std": 0.20900227705428157
+      },
+      {
+        "label": "PortScan",
+        "n": 1068,
+        "gamma_mean": 0.25562873861690477,
+        "gamma_std": 0.009624111102399987
+      }
+    ],
+    "route_distribution": {
+      "AUTO": 0.6896666666666667,
+      "HITL": 0.29686666666666667,
+      "REJECT": 0.013466666666666667
+    },
+    "hitl_by_class": [
+      {
+        "label": "BENIGN",
+        "n": 10543,
+        "auto_rate": 0.8480508394195201,
+        "hitl_rate": 0.15119036327421037,
+        "reject_rate": 0.0007587973062695627
+      },
+      {
+        "label": "DoS Hulk",
+        "n": 1273,
+        "auto_rate": 0.5263157894736842,
+        "hitl_rate": 0.4634721131186174,
+        "reject_rate": 0.01021209740769835
+      },
+      {
+        "label": "PortScan",
+        "n": 1068,
+        "auto_rate": 0.0,
+        "hitl_rate": 0.9953183520599251,
+        "reject_rate": 0.0046816479400749065
+      },
+      {
+        "label": "DDoS",
+        "n": 820,
+        "auto_rate": 0.7634146341463415,
+        "hitl_rate": 0.23658536585365852,
+        "reject_rate": 0.0
+      },
+      {
+        "label": "FTP-Patator",
+        "n": 243,
+        "auto_rate": 0.00823045267489712,
+        "hitl_rate": 0.757201646090535,
+        "reject_rate": 0.2345679012345679
+      },
+      {
+        "label": "DoS GoldenEye",
+        "n": 192,
+        "auto_rate": 0.140625,
+        "hitl_rate": 0.78125,
+        "reject_rate": 0.078125
+      },
+      {
+        "label": "Bot",
+        "n": 171,
+        "auto_rate": 0.011695906432748537,
+        "hitl_rate": 0.9532163742690059,
+        "reject_rate": 0.03508771929824561
+      },
+      {
+        "label": "SSH-Patator",
+        "n": 162,
+        "auto_rate": 0.0,
+        "hitl_rate": 0.7962962962962963,
+        "reject_rate": 0.2037037037037037
+      },
+      {
+        "label": "Web Attack - Brute Force",
+        "n": 139,
+        "auto_rate": 0.04316546762589928,
+        "hitl_rate": 0.7410071942446043,
+        "reject_rate": 0.2158273381294964
+      },
+      {
+        "label": "DoS Slowhttptest",
+        "n": 133,
+        "auto_rate": 0.21804511278195488,
+        "hitl_rate": 0.7744360902255639,
+        "reject_rate": 0.007518796992481203
+      },
+      {
+        "label": "DoS slowloris",
+        "n": 128,
+        "auto_rate": 0.296875,
+        "hitl_rate": 0.6875,
+        "reject_rate": 0.015625
+      },
+      {
+        "label": "Web Attack - XSS",
+        "n": 91,
+        "auto_rate": 0.02197802197802198,
+        "hitl_rate": 0.7362637362637363,
+        "reject_rate": 0.24175824175824176
+      },
+      {
+        "label": "Web Attack - SQL Injection",
+        "n": 19,
+        "auto_rate": 0.05263157894736842,
+        "hitl_rate": 0.6842105263157895,
+        "reject_rate": 0.2631578947368421
+      },
+      {
+        "label": "Infiltration",
+        "n": 14,
+        "auto_rate": 0.07142857142857142,
+        "hitl_rate": 0.6428571428571429,
+        "reject_rate": 0.2857142857142857
+      },
+      {
+        "label": "Heartbleed",
+        "n": 4,
+        "auto_rate": 0.0,
+        "hitl_rate": 0.75,
+        "reject_rate": 0.25
+      }
+    ],
+    "total_seconds_llm": 3.5650674590142444
+  },
+  "audit": {
+    "chain_ok": true,
+    "chain_msg": "OK",
+    "bad_idx": null,
+    "records": 15000,
+    "batches": 15,
+    "merkle_batch_size": 1024,
+    "audit_path": "results/audit_log.jsonl",
+    "batches_path": "results/merkle_batches.json",
+    "audit_seconds": 0.21333141601644456,
+    "audit_latency_per_record_ms": 0.014222094401096303,
+    "spot_verify_pass": 50,
+    "spot_verify_total": 50
+  },
+  "test_predictions_path": "results/test_predictions.csv"
+}
