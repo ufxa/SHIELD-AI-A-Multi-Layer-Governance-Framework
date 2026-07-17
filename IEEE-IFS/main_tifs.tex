@@ -834,16 +834,24 @@ Artificial Intelligence Applied to Smart and Sustainable Cities in the Brazilian
 
 % =====================================================================
 \section*{Declaration of Generative AI Use}
-The authors acknowledge the use of large language model (LLM) assistance for grammar
-refinement and bibliography formatting in the preparation of this manuscript, in accordance
-with IEEE's Authorship and AI Policy.
-All scientific content, experimental design, data analysis, and conclusions are the sole
+The authors used large language model (LLM) assistance in the preparation of this
+manuscript, including support for manuscript drafting and structural refinement,
+Python code scaffolding for the SHIELD-AI pipeline
+(\texttt{layer1\_ingest.py}, \texttt{layer2\_llm\_rag.py}, \texttt{layer3\_hitl.py},
+\texttt{layer4\_audit.py}) and the end-to-end experiment runner
+(\texttt{run\_experiment.py}), \LaTeX{} formatting, and bibliography organisation.
+This use is disclosed in accordance with IEEE's Authorship and AI Policy.
+All scientific contributions --- including the SHIELD-AI framework design, the
+six-layer reference architecture, formal definitions and proofs, the PC3 routing
+algorithm, experimental methodology, data analysis, and conclusions --- are the sole
 responsibility of the human authors.
-The SHIELD-AI framework design, the six-layer architecture, the formal definitions and
-proofs, the PC3 routing algorithm, and all quantitative results are original human
-contributions. Benchmark data are derived from the publicly available CICIDS-2017 dataset
-and synthetic extensions generated and validated by the authors; no benchmark figures were
-produced or altered by the LLM assistant.
+The reference experiment (Section~\ref{sec:eval}) was executed by automated scripts
+without LLM involvement in data collection or scoring.
+Benchmark data are derived from the publicly available CICIDS-2017 dataset and
+synthetic extensions generated and validated by the authors; no benchmark figures
+were produced or altered by the LLM assistant.
+The replication package (code, results, and figures) is available at
+\url{https://github.com/ufxa/SHIELD-AI-A-Multi-Layer-Governance-Framework}.
 
 % =====================================================================
 \bibliographystyle{IEEEtran}
