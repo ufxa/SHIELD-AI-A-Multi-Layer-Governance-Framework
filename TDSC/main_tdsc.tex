@@ -221,6 +221,20 @@ dependable ML pipelines \cite{sculley2015hidden} identifies feedback loops and
 undeclared consumers as principal reliability risks; SHIELD-AI's L6 layer directly
 addresses these through mandatory logging of all inference paths.
 
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.88\columnwidth]{F8_threat_trends.png}
+\caption{AI-augmented threat trends 2023--2025. Sources: Verizon DBIR 2025
+\cite{dbir2025}, IBM X-Force 2025 \cite{xforce2025}, CrowdStrike GTR 2025
+\cite{crowdstrike2025}, Microsoft MDDR 2025 \cite{mddr2025}.}
+\label{fig:trends}
+\end{figure}
+
+Fig.~\ref{fig:trends} illustrates the acceleration trajectory. Vishing incidents
+grew 442\% in H2 2024; infostealer campaigns grew 84\% year-over-year; identity
+attacks grew 32\% in H1 2025. These trends motivate the urgency of governance
+frameworks that can adapt controls to a rapidly evolving threat landscape.
+
 \subsection{Adjacent Governance Artifacts}
 The Layered Governance Architecture (LGA) \cite{lga2026} proposes four-layer agent governance
 (execution sandboxing, intent verification, zero-trust authorization, immutable audit),
@@ -571,20 +585,12 @@ Routing thresholds are functions of organizational policy rather than ad-hoc con
 making them auditable to regulators (Theorem~\ref{thm:routing}).
 
 \paragraph{Sensitivity to cost parameters.}
-The threshold $r^*_{\text{auto}}$ is sensitive to the ratio
-$\kappa = c_{\text{err}} / (b + c_{\text{err}})$. For the reference configuration
-($b{=}1$, $c_{\text{err}}{=}2$, $c_{\text{analyst}}{=}0.3$, $\lambda{=}0.3$),
-$r^*_{\text{auto}} = 0.80$. Three boundary conditions of operational interest:
-(i) when $c_{\text{err}} \to \infty$ (catastrophic false negative, e.g., critical
-infrastructure shutdown), $r^*_{\text{auto}} \to 1 - (c_{\text{analyst}} + \lambda)/b$,
-meaning only near-perfect confidence escapes HITL; (ii) when $c_{\text{analyst}} \to 0$
-(automated HITL with negligible analyst cost), $r^*_{\text{auto}} \to 1 - \kappa$,
-reducing the AUTO-eligible zone to near-certain detections only; (iii) when
-$b \gg c_{\text{err}}$ (low error cost relative to benefit, e.g., informational alerts),
-$r^*_{\text{auto}} \to 1 - c_{\text{analyst}}/b$, allowing aggressive AUTO routing even
-at moderate confidence. These boundary analyses confirm that PC3 degrades gracefully
-under parameter extremes and retains interpretable behavior across the full feasible
-parameter space.
+For the reference configuration ($b{=}1$, $c_{\text{err}}{=}2$, $c_{\text{analyst}}{=}0.3$,
+$\lambda{=}0.3$), $r^*_{\text{auto}}{=}0.80$. Boundary cases confirm graceful degradation:
+as $c_{\text{err}} \to \infty$ (OT safety context), $r^*_{\text{auto}} \to 1 - (c_{\text{analyst}}
++ \lambda)/b$ (only near-certain detections auto-resolve); as $b \gg c_{\text{err}}$
+(informational alerts), $r^*_{\text{auto}} \to 1 - c_{\text{analyst}}/b$ (aggressive AUTO).
+PC3 retains interpretable behavior across the full feasible parameter space.
 
 \begin{algorithm}[!t]
 \caption{PC3 -- Human Validation and Hallucination Control}
@@ -652,6 +658,21 @@ Identity/Zero-Trust  & T1078  & n/a       & PR.AC-1 & LLM02 & A3  & A.5.15 & 8.2
 \bottomrule
 \end{tabular}
 \end{table*}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.88\columnwidth]{F7_mapping_heatmap.png}
+\caption{Cross-standard control coverage heatmap. Rows are SHIELD-AI controls; columns
+are the seven standards. Darker cells indicate stronger (explicit article/clause-level)
+alignment. LGPD coverage is achieved through controls already required by ISO 27001
+and NIST CSF 2.0.}
+\label{fig:heatmap}
+\end{figure}
+
+Fig.~\ref{fig:heatmap} visualizes the density of the cross-standard alignment.
+The heatmap confirms that L4 (LLM/RAG) controls are the densest column for OWASP LLM
+Top 10, while L6 (audit) controls are the densest for LGPD -- matching the regulatory
+priority of traceability for sensitive data processing decisions.
 
 \subsection{Properties and Proofs}
 \label{ssec:properties}
@@ -902,20 +923,12 @@ elevated $c_{\text{err}}$ (patient-safety stakes); L6 enforces LGPD Art.~46--48 
 Resolution 15/2024 incident-notification timing (3 business days, extendable to 20)
 \cite{anpd15}.
 
-The healthcare SOC scenario highlights three SHIELD-AI properties that are absent from
-conventional SIEM deployments. First, the PII gate in L1 prevents EHR patient identifiers
-(CPF, CNS card) from being forwarded to the LLM prompt, maintaining LGPD Art.~11
-restrictions on sensitive health data processing even within the security pipeline.
-Second, the GraphRAG Knowledge Layer allows correlation of network anomalies with
-medical device inventory (represented as Asset nodes in $\mathcal{G}$), enabling
-identification of ransomware lateral movement via connected infusion pumps or PACS
-servers -- correlations that vector-only RAG cannot surface. Third, when the L4
-reliability composite falls below $r^*_{\text{auto}}$ for an alert tagged with LGPD
-sensitivity labels, L5 routes to a clinician-aware analyst tier rather than the
-standard IT analyst queue, ensuring that the human reviewer has domain context matching
-the alert's sensitivity class. This tri-layer response -- PII isolation, graph-aware
-correlation, and tiered HITL -- instantiates the dependability argument at the
-fault-prevention, fault-tolerance, and fault-removal levels simultaneously.
+Key properties: (i) the L1 PII gate prevents EHR patient identifiers (CPF, CNS) from
+entering the LLM prompt, maintaining LGPD Art.~11 restrictions within the security pipeline;
+(ii) GraphRAG correlates network anomalies with medical device Asset nodes, surfacing lateral
+movement through infusion pumps that vector-only RAG cannot detect; (iii) alerts tagged with
+LGPD sensitivity labels are routed to a clinician-aware analyst tier at L5, ensuring
+domain-context match at the human review stage.
 
 \subsection{Scenario B: Government and Critical Infrastructure}
 Critical infrastructure accounts for 70\% of IBM-investigated incidents \cite{xforce2025};
@@ -925,26 +938,13 @@ campaigns are up 87\% \cite{mddr2025}. SHIELD-AI instantiation: L6 anchors to NI
 thresholds tune the latency penalty $\lambda$ to OT availability constraints
 \cite{nsa2024deploying}.
 
-In OT/SCADA environments, the latency penalty $\lambda$ in the PC3 cost model acquires
-operational significance beyond analyst workflow: an unmitigated ransomware event in a
-power-generation SCADA network can trigger physical process shutdowns within seconds of
-payload activation. This converts $c_{\text{err}}$ from a financial to a physical-safety
-cost parameter. SHIELD-AI operationalizes this by allowing sector-specific cost
-parameterization without modifying the routing algorithm: operators set $c_{\text{err}}$
-proportional to the estimated cost of false-negative misclassification in their specific
-OT context (downtime cost per minute $\times$ expected incident duration), and
-Theorem~\ref{thm:routing} guarantees that the derived threshold $r^*_{\text{auto}}$
-is policy-optimal under those parameters.
-
-Brazilian critical infrastructure SOCs face the additional regulatory dimension of
-LGPD's Sector Resolution pipeline, which requires incident notification to the ANPD within
-72 hours if personal data is involved. L6's Merkle-chained audit log provides the evidence
-base for this notification: the log includes the PII flag decision from L1, the LLM's
-GDPR/LGPD sensitivity assessment from L4, and the analyst's final classification from L5,
-constituting the required chain of events for regulatory notification purposes. The
-monotonicity guarantee (P2) ensures that adding ANPD-specific controls to the mapping
-can only increase coverage, providing a compliance-by-construction argument for new
-regulatory requirements as they are issued.
+In OT/SCADA environments, $c_{\text{err}}$ becomes a physical-safety parameter
+(downtime cost per minute $\times$ expected incident duration); Theorem~\ref{thm:routing}
+guarantees that the derived $r^*_{\text{auto}}$ is policy-optimal under those domain-specific
+values without modifying the routing algorithm. The L6 Merkle log provides the evidence chain
+required for ANPD incident notification within 72 hours, with PII flag (L1), sensitivity
+assessment (L4), and analyst classification (L5) as verifiable fields; P2 ensures that
+adding ANPD-specific controls can only increase coverage.
 
 % =====================================================================
 \section{Comparison with Related Frameworks}
@@ -1079,6 +1079,19 @@ SHIELD-AI (full) & 0.984 & 0.004 & 0.998 & 0.497 & 69/30/1\% \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.88\columnwidth]{F6_roc_comparison.png}
+\caption{ROC curves for rule-based, Random Forest, and SHIELD-AI full pipeline on the
+synthetic CICIDS-2017-like test set ($n{=}15{,}000$, seed 42). SHIELD-AI and RF overlap
+at AUC~0.998/0.999; the rule-based detector degrades to AUC~0.750.}
+\label{fig:roc}
+\end{figure}
+
+Fig.~\ref{fig:roc} visualizes the ROC comparison across configurations. SHIELD-AI matches
+the RF baseline across all operating points, confirming that the governance overhead (HITL
+routing, audit logging) incurs no detection-quality penalty.
 
 \textbf{Key observations.} (1) The adversarial-aware groundedness $\gamma'$ (mean 0.575,
 $p_{50}$=0.570, $p_{10}$=0.255, $p_{90}$=0.766) is the principal differentiator in PC3
@@ -1291,86 +1304,52 @@ uncertainty; Theorem~\ref{thm:routing} guarantees policy-derivable routing, not 
 
 \subsection{Complexity and Scalability Analysis}
 \label{ssec:complexity}
-The computational cost of SHIELD-AI at inference time is dominated by three operations.
-\emph{L3 GraphRAG retrieval}: given a knowledge graph with $|V|$ nodes and $|E|$ edges,
-multi-hop traversal for $k$ hops requires $O(d^k)$ neighbor expansions, where $d$ is the
-average node degree. In practice, $k \leq 3$ and $d < 50$ for SOC knowledge graphs of
-typical size ($|V| \sim 10^4$), yielding sub-second latency per alert. Vectorized
-batch retrieval further amortizes the cost across concurrent alerts.
-\emph{L4 LLM inference}: scales linearly in prompt length. The structured prompt template
-(Section~\ref{ssec:calibration}) bounds context to $\sim$2000 tokens per alert, keeping
-per-alert latency predictable regardless of alert volume.
-\emph{L6 audit logging}: each record requires one HMAC-256 operation and one dictionary
-merge, both $O(1)$. Merkle batch commitment (one SHA-256 tree per batch of $B$ records)
-costs $O(B \log B)$ and is performed asynchronously, incurring no latency on the alert path.
-
-At scale, the principal bottleneck shifts to LLM API throughput. With a parallelism budget
-of $P$ concurrent LLM calls, SHIELD-AI sustains $P \cdot (1/t_{\text{LLM}})$ alerts per
-second, where $t_{\text{LLM}}$ is median per-alert latency (empirically 1.2 s in our
-setup). For $P = 16$, this yields $\sim$13 alerts/s -- sufficient for mid-tier SOCs
-ingesting $<$10$^6$ alerts/day. High-volume MSSPs should front the L4 tier with a
-priority queue that routes only above-threshold-confidence alerts to the LLM, falling back
-to the rule-based L1 classifier for burst absorption. This is consistent with the 69\%
-AUTO routing rate observed in our benchmark: the majority of alerts never reach L4.
+Inference cost is dominated by three operations: L3 GraphRAG traversal ($O(d^k)$ for $k{\leq}3$
+hops, $d{<}50$, sub-second at $|V|{\sim}10^4$); L4 LLM inference (linear in bounded 2000-token
+prompt); and L6 audit ($O(1)$ HMAC per record, asynchronous $O(B\log B)$ Merkle batch).
+At $P{=}16$ parallel LLM calls with $t_{\text{LLM}}{=}1.2$~s, throughput reaches
+${\sim}13$~alerts/s -- sufficient for mid-tier SOCs ingesting ${<}10^6$~alerts/day.
+The 69\% AUTO routing rate means most alerts never reach L4, providing inherent burst
+absorption without additional infrastructure.
 
 \subsection{Research Agenda}
 \label{ssec:agenda}
 Nine open problems frame the forward research programme.
-
-\textbf{OP1 -- Operational validation.} The reference experiment uses synthetic data
-derived from CICIDS-2017; live SOC validation via historical-incident replay is the
-critical next step. Partnering with a MSSP or national CSIRT to annotate an incident
-log and replay it through SHIELD-AI would yield empirical ground truth for the PC3
-routing thresholds and per-class F1 scores.
-
-\textbf{OP2 -- Multi-agent adversarial dynamics.} SHIELD-AI currently assumes a
-single-agent architecture. The OWASP Agentic AI Top-10 \cite{owasp2025agentic}
-documents emergent risks when agents delegate subtasks to subordinate agents, including
-trust boundary collapse and prompt injection cascades \cite{lga2026}. Extending the
-formal model (Definition~1) to multi-agent semantics, with explicit trust labels per
-inter-agent message, is required before SHIELD-AI can govern autonomous AI pipelines.
-
-\textbf{OP3 -- Cross-jurisdictional compliance.} The current control mapping covers
-LGPD and GDPR. Extending it to CCPA (California), DPDP (India), and the forthcoming
-ASEAN AI governance framework would enable SHIELD-AI deployment in multinational SOCs
-and test the monotonicity guarantee (P2) under heterogeneous regulatory logics.
-
-\textbf{OP4 -- Continuous-learning HITL.} Analyst corrections in L5 represent
-a rich signal for online fine-tuning of the L4 LLM. Safe integration requires
-distribution-shift detection (to halt fine-tuning when the correction stream diverges
-from the training distribution) and audit-trail linkage (so every model update is
-traceable to specific L5 decisions). Theorem~\ref{thm:routing} does not extend to
-continuously shifting models without re-deriving the calibration bound.
-
-\textbf{OP5 -- Cost-effectiveness analysis.} A full TCO comparison against the
-baseline SOC configuration (without SHIELD-AI) requires instrumenting analyst-hours
-per true positive, false-positive investigation cost, and audit preparation overhead.
-The 69\% AUTO routing rate is a proxy, not a definitive cost reduction estimate.
-
-\textbf{OP6 -- Standards co-evolution.} The seven standards in the mapping evolve
-independently. A protocol for tracking version changes, flagging affected controls,
-and re-verifying P2 after updates would reduce the maintenance burden for compliance
-teams and is a prerequisite for certification-body adoption.
-
-\textbf{OP7 -- Open-source reference implementation.} The companion repository
-(\url{https://github.com/ufxa/SHIELD-AI-A-Multi-Layer-Governance-Framework})
-contains the experiment runner and evaluation scripts. A camera-ready DOI-pinned
-release with Docker-compose deployment, a synthetic alert dataset, and an interactive
-HITL dashboard would lower the barrier for replication studies.
-
-\textbf{OP8 -- Empirical calibration of reliability weights.} The composite reliability
-$R = \omega_\theta\theta + \omega_\sigma\sigma + \omega_\gamma\gamma + \omega_\rho\rho$
-uses uniform weights in the reference experiment. Empirical calibration across LLM
-families (GPT-4o, Claude, Gemini, Llama-3) and alert taxonomies would determine whether
-a single weight vector transfers across deployments or requires per-deployment tuning.
-
-\textbf{OP9 -- Purple-team evaluation and KPI programme.} Adversarial purple-team
-exercises applying prompt injection \cite{greshake2023indirect} and universal adversarial
-suffixes \cite{zou2023universal} in a controlled SOC lab would stress-test the L4 controls
-and HITL escalation path under adversarial conditions. Alongside this, a Compliance
-Theater Index KPI -- measuring the gap between declared controls and operationalized
-behavior -- would provide a quantitative mechanism for detecting governance-without-practice,
-directly addressing limitation A7.
+\textbf{OP1 -- Operational validation.}
+Live SOC validation via historical-incident replay with a MSSP or national CSIRT would provide
+empirical ground truth for PC3 routing thresholds beyond the synthetic benchmark.
+\textbf{OP2 -- Multi-agent adversarial dynamics.}
+Extending the formal model to multi-agent semantics \cite{owasp2025agentic,lga2026} --
+with explicit trust labels per inter-agent message -- is required before SHIELD-AI can
+govern autonomous AI pipelines where agents delegate subtasks to subordinate agents.
+\textbf{OP3 -- Cross-jurisdictional compliance.}
+Extending the control mapping to CCPA, DPDP (India), and ASEAN AI governance would
+enable multinational SOC deployment and stress-test the monotonicity guarantee (P2)
+under heterogeneous regulatory logics.
+\textbf{OP4 -- Continuous-learning HITL.}
+Analyst corrections in L5 are a rich signal for online fine-tuning; safe integration
+requires distribution-shift detection and audit-trail linkage so every model update is
+traceable to specific L5 decisions.
+\textbf{OP5 -- Cost-effectiveness analysis.}
+A full TCO comparison requires instrumenting analyst-hours per TP, FP investigation cost,
+and audit overhead; the 69\% AUTO rate is a proxy, not a definitive reduction estimate.
+\textbf{OP6 -- Standards co-evolution.}
+A protocol for tracking standard version changes and re-verifying P2 after updates is a
+prerequisite for certification-body adoption of the cross-standard mapping.
+\textbf{OP7 -- Open-source release.}
+A camera-ready DOI-pinned release with Docker-compose deployment and interactive HITL
+dashboard at
+\url{https://github.com/ufxa/SHIELD-AI-A-Multi-Layer-Governance-Framework}
+would lower the barrier for replication studies.
+\textbf{OP8 -- Reliability weight calibration.}
+Empirical calibration of $(\omega_\theta, \omega_\sigma, \omega_\gamma, \omega_\rho)$
+across LLM families (GPT-4o, Claude, Gemini, Llama-3) would determine whether a single
+weight vector transfers across deployments.
+\textbf{OP9 -- Purple-team evaluation.}
+Adversarial exercises applying prompt injection \cite{greshake2023indirect,zou2023universal}
+in a controlled SOC lab, combined with a Compliance Theater Index KPI measuring the gap
+between declared controls and operationalized behavior, would stress-test L4 controls
+and address limitation A7.
 
 % =====================================================================
 \section{Conclusion}
