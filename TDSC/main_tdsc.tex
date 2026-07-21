@@ -24,12 +24,16 @@
 \lstset{
   basicstyle=\ttfamily\scriptsize,
   breaklines=true,
+  breakatwhitespace=false,
   frame=single,
   numbers=left,
-  numberstyle=\tiny,
-  xleftmargin=1.5em,
-  framexleftmargin=1.5em,
-  captionpos=b
+  numberstyle=\tiny\color{gray},
+  numbersep=6pt,
+  xleftmargin=2.8em,
+  framexleftmargin=2.2em,
+  captionpos=b,
+  aboveskip=4pt,
+  belowskip=4pt,
 }
 
 \graphicspath{{../V4/figures/build/}}
@@ -770,9 +774,10 @@ commitment logic from \texttt{layer4\_audit.py}. The implementation is self-cont
 depends only on Python's \texttt{hashlib} and \texttt{hmac} standard library modules,
 ensuring reproducibility without external dependencies.
 
+\begin{figure}[t]
 \begin{lstlisting}[language=Python, caption={SHIELD-AI L6 core: HMAC-signed record
-append and Merkle batch commitment (layer4\_audit.py, excerpt).},
-label=lst:audit, float=tp]
+append and Merkle batch commitment (\texttt{layer4\_audit.py}, excerpt).},
+label=lst:audit]
 import hashlib, hmac, json, time
 from typing import Any
 
@@ -781,21 +786,18 @@ class AuditLog:
         self._secret = secret
         self._batch_size = batch_size
         self._records: list[dict] = []
-        self._roots: list[str] = []
-        self._prev_hmac = b"0" * 32  # chain anchor
+        self._roots:   list[str]  = []
+        self._prev_hmac = b"0" * 32          # chain anchor
 
     def _sign(self, payload: bytes) -> str:
-        return hmac.new(
-            self._secret, payload, hashlib.sha256
-        ).hexdigest()
+        return hmac.new(self._secret, payload, hashlib.sha256).hexdigest()
 
     def append(self, record: dict[str, Any]) -> str:
-        record["ts"] = time.monotonic_ns()
+        record["ts"]   = time.monotonic_ns()
         record["prev"] = self._prev_hmac.hex()
-        raw = json.dumps(record, sort_keys=True
-                         ).encode()
+        raw = json.dumps(record, sort_keys=True).encode()
         sig = self._sign(raw)
-        record["sig"] = sig
+        record["sig"]  = sig
         self._prev_hmac = bytes.fromhex(sig)
         self._records.append(record)
         if len(self._records) % self._batch_size == 0:
@@ -803,42 +805,35 @@ class AuditLog:
         return sig
 
     def _commit_batch(self) -> str:
-        leaves = [r["sig"] for r in
-                  self._records[-self._batch_size:]]
-        root = self._merkle_root(leaves)
+        leaves = [r["sig"] for r in self._records[-self._batch_size:]]
+        root   = self._merkle_root(leaves)
         self._roots.append(root)
         return root
 
     @staticmethod
     def _merkle_root(leaves: list[str]) -> str:
-        layer = [hashlib.sha256(
-                     l.encode()).hexdigest()
-                 for l in leaves]
+        layer = [hashlib.sha256(l.encode()).hexdigest() for l in leaves]
         while len(layer) > 1:
             if len(layer) % 2:
                 layer.append(layer[-1])
-            layer = [hashlib.sha256(
-                         (a + b).encode()).hexdigest()
-                     for a, b in
-                     zip(layer[::2], layer[1::2])]
+            layer = [hashlib.sha256((a + b).encode()).hexdigest()
+                     for a, b in zip(layer[::2], layer[1::2])]
         return layer[0]
 
     def verify_chain(self) -> bool:
         prev = b"0" * 32
         for r in self._records:
             check = dict(r)
-            sig = check.pop("sig")
+            sig   = check.pop("sig")
             check["prev"] = prev.hex()
-            raw = json.dumps(check,
-                             sort_keys=True).encode()
-            expected = hmac.new(
-                self._secret, raw, hashlib.sha256
-            ).hexdigest()
+            raw   = json.dumps(check, sort_keys=True).encode()
+            expected = hmac.new(self._secret, raw, hashlib.sha256).hexdigest()
             if not hmac.compare_digest(sig, expected):
                 return False
             prev = bytes.fromhex(sig)
         return True
 \end{lstlisting}
+\end{figure}
 
 \subsection{Reproducibility Artifacts}
 The full replication package -- dataset generator, pipeline code, evaluation scripts,
