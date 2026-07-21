@@ -353,23 +353,23 @@ of breached AI-incident orgs lacked AI access controls. \textbf{R5 Over-automati
 \cite{ibm2025costbreach}: 63\% of organizations had no AI governance policy.
 
 \begin{table}[!t]
-\renewcommand{\arraystretch}{1.2}
+\renewcommand{\arraystretch}{1.15}
 \caption{LLM-specific risks with tiered controls.}
 \label{tab:risks}
 \centering
-\scriptsize
-\begin{tabular}{p{1.2cm}p{1.5cm}p{1.5cm}p{1.5cm}}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{llll}
 \toprule
 \textbf{Risk} & \textbf{Tier-1} & \textbf{Tier-2} & \textbf{Tier-3} \\
 \midrule
-R1 Hallucin. & RAG vs.\ ATT\&CK & SelfCheckGPT & Human override \\
-R2 Injection & Input sanitize   & Struct.\ prompt & Privilege contain \\
-R3 Tool poi. & Tool allowlist   & Action audit  & Per-action HITL \\
-R4 Leakage   & PII/secret scan  & Private model & LGPD gate \\
-R5 Over-auto & Tiered routing   & Decision trace & Trust calibrate \\
-R6 Shadow AI & AI inventory     & API-exfil det. & Governance train \\
+R1 Hallucination & RAG vs.\ ATT\&CK  & SelfCheckGPT    & Human override     \\
+R2 Inj.\ attack  & Input sanitize    & Struct.\ prompt  & Privilege contain  \\
+R3 Tool poison.  & Tool allowlist    & Action audit     & Per-action HITL    \\
+R4 Data leakage  & PII/secret scan   & Private model    & LGPD gate          \\
+R5 Over-autom.   & Tiered routing    & Decision trace   & Trust calibrate    \\
+R6 Shadow AI     & AI inventory      & API-exfil det.   & Governance train   \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 % =====================================================================
@@ -660,15 +660,15 @@ Identity/Zero-Trust  & T1078  & n/a       & PR.AC-1 & LLM02 & A3  & A.5.15 & 8.2
 \end{tabular}
 \end{table*}
 
-\begin{figure}[!t]
+\begin{figure*}[!t]
 \centering
-\includegraphics[width=0.88\columnwidth]{F7_mapping_heatmap.png}
+\includegraphics[width=\textwidth]{F7_mapping_heatmap.png}
 \caption{Cross-standard control coverage heatmap. Rows are SHIELD-AI controls; columns
 are the seven standards. Darker cells indicate stronger (explicit article/clause-level)
 alignment. LGPD coverage is achieved through controls already required by ISO 27001
 and NIST CSF 2.0.}
 \label{fig:heatmap}
-\end{figure}
+\end{figure*}
 
 Fig.~\ref{fig:heatmap} visualizes the density of the cross-standard alignment.
 The heatmap confirms that L4 (LLM/RAG) controls are the densest column for OWASP LLM
