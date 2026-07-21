@@ -1,0 +1,32 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# LaTeX auxiliares
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.fdb_latexmk
+*.fls
+*.synctex
+*.spl
+*.toc
+
+# Python
+__pycache__/
+*.pyc
+
+# Versões antigas
+Delete/
+
+# Credenciais e segredos (NUNCA commitar)
+*.env
+.env*
+secrets.*
+*.key
+*.pem
+*.p12
+*.pfx
+config.local.*
