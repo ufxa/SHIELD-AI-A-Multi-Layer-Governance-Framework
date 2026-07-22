@@ -17,24 +17,9 @@
 \usepackage{multirow}
 \usepackage{makecell}
 \usepackage{url}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{microtype}
 \usepackage{enumitem}
-\usepackage{listings}
-\lstset{
-  basicstyle=\ttfamily\scriptsize,
-  breaklines=true,
-  breakatwhitespace=false,
-  frame=single,
-  numbers=left,
-  numberstyle=\tiny\color{gray},
-  numbersep=6pt,
-  xleftmargin=2.8em,
-  framexleftmargin=2.2em,
-  captionpos=b,
-  aboveskip=4pt,
-  belowskip=4pt,
-}
 
 \graphicspath{{../V4/figures/build/}}
 
@@ -52,18 +37,24 @@
 \begin{document}
 \sloppy
 
-\title{SHIELD-AI: A Multi-Layer Governance Framework for Safe and Auditable Generative AI Integration in Security Operations Centers}
+\title{SHIELD-AI: A Multi-Layer Governance Reference Architecture for Safer and Auditable Generative AI Integration in Security Operations Centers}
 
-\author{José~de~Souza~Junior,~Jussiléa~Gurjão~de~Figueiredo,~%
-Romualdo~A.~P.~Júnior,~Marcelo~A.~da~Silva,~and~Allan~D.~B.~Costa%
+\author{José~de~Souza~Junior,~Milton~S.~C.~de~Oliveira,~%
+Jussiléa~Gurjão~de~Figueiredo,~Romualdo~A.~P.~Júnior,~%
+Marcelo~A.~da~Silva,~and~\mbox{Allan~D.~B.~Costa}%
 \thanks{Manuscript received July 2026. This work was supported in part by the
 institutions of the authors.}%
 \thanks{J.~de~Souza~Junior is with the University of Brasília (UnB), Brasília, DF, Brazil
 (e-mail: jose.souza@unb.br). \emph{Corresponding author.}}%
+\thanks{M.~S.~C.~de~Oliveira is with the Universidade Nove de Julho (UNINOVE),
+São Paulo, SP, Brazil, and also with the Technology and Information Company
+of Social Security (DATAPREV), São Paulo, SP, Brazil
+(e-mail: milton.oliveira@dataprev.gov.br).
+ORCID: \href{https://orcid.org/0000-0002-7966-3960}{0000-0002-7966-3960}.}%
 \thanks{J.~G.~de~Figueiredo is with the Federal University of Pará (UFPA), Smart and
 Sustainable Cities Laboratory, Belém, PA, Brazil
 (e-mail: jussilea.figueiredo@icen.ufpa.br).}%
-\thanks{R.~A.~P.~Júnior is with Graphdata Ltda, Brasília, DF, Brazil
+\thanks{R.~A.~P.~Júnior is with Modal Institute, Brasília, DF, Brazil
 (e-mail: romualdoalves@modal.org.br).}%
 \thanks{M.~A.~da~Silva is with the Brazilian Federal Police (PF),
 Brasília, DF, Brazil
@@ -83,18 +74,18 @@ ORCID: \href{https://orcid.org/0000-0002-7068-8889}{0000-0002-7068-8889}.}%
 \begin{abstract}
 Security Operations Centers (SOCs) face an unprecedented governance challenge as generative
 artificial intelligence (GenAI) and large language models (LLMs) are simultaneously weaponized
-by adversaries---enabling automated phishing, deepfake fraud, AI-assisted malware, and
-adversarial reconnaissance at scale---and adopted defensively as threat-hunting assistants,
+by adversaries, enabling automated phishing, deepfake fraud, AI-assisted malware, and
+adversarial reconnaissance at scale, and adopted defensively as threat-hunting assistants,
 alert triage engines, and incident-response advisors.
-This dual-use reality exposes four critical governance gaps that existing standards fail to close:
+Our review identifies four governance gaps not jointly addressed by the artifacts examined:
 (G1)~operational SOC architecture is absent from AI-lifecycle frameworks such as ENISA Multilayer;
 (G2)~agent-governance proposals do not address regulatory compliance;
 (G3)~corporate governance standards (NIST AI RMF, ISO 42001) omit SOC-operational architectural
 detail; and
 (G4)~no existing framework incorporates Brazil's Lei Geral de Proteção de Dados (LGPD) explicitly.
-To close them, we propose \textbf{SHIELD-AI}, a six-layer governance framework for safe and
-auditable generative AI integration in security operations.
-Grounded in Design Science Research and a systematic mapping of 63 verified references, SHIELD-AI
+To address them, we propose \textbf{SHIELD-AI}, a six-layer reference architecture for safer and
+more auditable generative AI integration in security operations.
+Grounded in Design Science Research and a focused mapping represented by 50 cited sources, SHIELD-AI
 comprises: (i)~a dual-use taxonomy of GenAI cybersecurity capabilities;
 (ii)~a probabilistic risk stratification model for six LLM-specific operational risks with a
 reliability quadruple $\langle\theta, \sigma, \gamma, \rho\rangle$;
@@ -103,12 +94,14 @@ GraphRAG Correlation Engine, LLM Governance Layer, Human-in-the-Loop, and Compli
 Layer; and
 (iv)~a cross-standard control mapping aligned to MITRE ATT\&CK/ATLAS, NIST CSF 2.0, OWASP LLM
 Top~10 (2025), ISO/IEC 27001/42001, and LGPD.
-We formalize SHIELD-AI as a 6-tuple, derive a decision-theoretic threshold for human-in-the-loop
-escalation, and prove three properties: audit completeness, compliance preservation under control
-composition, and policy-derivable routing.
-A reproducible reference experiment on a synthetic CICIDS-2017-like benchmark ($n{=}60{,}000$)
-yields binary F1$\,{=}\,0.984$, AUC$\,{=}\,0.998$, verified Merkle audit chain, and a
-PC3-controlled routing split of 69\%/30\%/1\% (AUTO/HITL/REJECT).
+We formalize SHIELD-AI as a 6-tuple, derive an AUTO/HITL decision boundary, and state three
+conditional properties concerning trace completeness, selected-control coverage, and
+policy-derived routing.
+A reproducible component-level experiment on a synthetic CICIDS-2017-like benchmark
+($n{=}60{,}000$), using a Random-Forest-derived LLM/RAG surrogate rather than a production LLM,
+yields binary F1$\,{=}\,0.984$, AUC$\,{=}\,0.998$, successful local audit-chain verification,
+and a PC3 routing split of 69\%/30\%/1\% (AUTO/HITL/REJECT). These results demonstrate prototype
+execution, not operational GenAI safety or field effectiveness.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -259,7 +252,8 @@ and 42001:2023 \cite{iso42001} cover ISMS and AI-MS requirements. ENISA Multilay
 
 \subsection{Research Gap}
 Table~\ref{tab:gapmatrix} consolidates eight gap dimensions across the closest pre-art.
-SHIELD-AI is the only single source closing all eight. The contribution is architectural
+Under this author-defined coding frame, SHIELD-AI is the only artifact marked as addressing
+all eight. The table is a positioning aid rather than evidence of exhaustive novelty. The contribution is architectural
 integration rather than gap discovery: the four dimensions (SOC-operational scope, LLM-as-tool
 risk depth, cross-standard mapping, LGPD inclusion) individually appear in adjacent work but
 have not been unified in a single validated artifact.
@@ -296,8 +290,8 @@ identification (G1--G4), objectives (RQ0--RQ5), design and development (framewor
 demonstration (scenarios), evaluation (empirical), communication (this paper). DSR is
 appropriate because the contribution is a design artifact rather than a theory or experiment.
 
-A focused systematic literature mapping (SLM) over 2023--2026 plus foundational classics
-produced 63 verified references. Sources included arXiv (cs.CR), IEEE/ACM open access, NIST,
+A focused literature mapping over 2023--2026 plus foundational classics produced the evidence
+base represented by the 50 sources cited in this manuscript. Sources included arXiv (cs.CR), IEEE/ACM open access, NIST,
 ENISA, CISA, MITRE, OWASP, and authoritative gray literature (DBIR, Microsoft DDR, IBM X-Force,
 Mandiant M-Trends, CrowdStrike GTR). Full strings and inclusion/exclusion criteria appear in
 the companion supplementary material.
@@ -412,7 +406,7 @@ $\mathcal{A}$ is the audit invariant requiring that every decision $d \in \mathc
 audit record containing
 $\langle \text{input, prompt, graph\_path, output,}\ \langle\theta, \sigma, \gamma, \rho\rangle,$
 $\text{route, analyst, timestamp}\rangle$;
-and $\mathcal{P}$ is the set of governance properties guaranteed by construction.
+and $\mathcal{P}$ is the set of conditional governance properties stated for the design.
 \end{definition}
 
 The \emph{reliability triple} $\langle\theta, \sigma, \gamma\rangle$ is extended in V4 with
@@ -558,13 +552,16 @@ is typed \textsc{DomainController} in the Asset Graph; the IOC cluster is associ
 campaign APT29:CozyBear-2025. L6 audit record contains the explicit path $\Pi$ and
 $\rho = 0.87$.
 
-\subsection{Calibration Bound and Honest Limits}
-Under non-adversarial conditions with positive correlation between the reliability quadruple
-and correctness, $P(\neg H \mid R = r) \geq r$. This bound does \emph{not} hold under prompt
-injection \cite{liu2024formalizing,zou2023universal}, which inflates apparent reliability
-while suppressing correctness. L4 controls (sanitization, instruction--data separation,
-output filtering) operate \emph{before} $R$ is computed and aim to restore the bound's
-applicability. Residual risk is the principal motivation for HITL as an architectural primitive.
+\subsection{Calibration Assumption and Honest Limits}
+\label{ssec:calibration}
+PC3 interprets $R$ as a decision score. Treating it as a lower bound on correctness would require
+the explicit calibration condition $P(\neg H \mid R=r) \geq r$; positive correlation alone does
+not imply this condition. The present component-level experiment does not establish such
+calibration for a production LLM. Prompt injection \cite{liu2024formalizing,zou2023universal}
+can further inflate apparent reliability while suppressing correctness. L4 controls
+(sanitization, instruction--data separation, and output filtering) operate before $R$ is
+computed and may reduce this risk, but their ability to preserve or restore calibration must be
+measured under attack. This unresolved risk motivates HITL as an architectural primitive.
 
 \paragraph{Adversarial-uncertainty mandatory-HITL rule.}
 When inter-signal disagreement $\Delta = |\sigma - \gamma| > 0.25$, or
@@ -581,21 +578,24 @@ the expected utilities are:
 \mathcal{U}_{\text{HITL}}(r) &= b - c_{\text{analyst}} - \lambda, \\
 \mathcal{U}_{\text{reject}}(r) &= -c_{\text{miss}}.
 \end{align}
-Setting $\mathcal{U}_{\text{auto}} = \mathcal{U}_{\text{HITL}}$ yields the optimal threshold:
+Setting $\mathcal{U}_{\text{auto}} = \mathcal{U}_{\text{HITL}}$ yields their pairwise decision boundary:
 \begin{equation}
 r^*_{\text{auto/HITL}} = \frac{b + c_{\text{err}} - c_{\text{analyst}} - \lambda}{b + c_{\text{err}}}.
 \label{eq:threshold}
 \end{equation}
-Routing thresholds are functions of organizational policy rather than ad-hoc constants,
-making them auditable to regulators (Theorem~\ref{thm:routing}).
+The AUTO/HITL boundary is therefore a function of organizational policy rather than an ad-hoc
+constant. A globally optimal three-action policy also requires pairwise comparison with
+$\mathcal{U}_{\text{reject}}$; in the current prototype, $\tau_{\text{review}}$ and hard
+deny/sensitivity rules remain explicit policy inputs rather than consequences of Eq.~\eqref{eq:threshold}.
 
 \paragraph{Sensitivity to cost parameters.}
 For the reference configuration ($b{=}1$, $c_{\text{err}}{=}2$, $c_{\text{analyst}}{=}0.3$,
-$\lambda{=}0.3$), $r^*_{\text{auto}}{=}0.80$. Boundary cases confirm graceful degradation:
-as $c_{\text{err}} \to \infty$ (OT safety context), $r^*_{\text{auto}} \to 1 - (c_{\text{analyst}}
-+ \lambda)/b$ (only near-certain detections auto-resolve); as $b \gg c_{\text{err}}$
-(informational alerts), $r^*_{\text{auto}} \to 1 - c_{\text{analyst}}/b$ (aggressive AUTO).
-PC3 retains interpretable behavior across the full feasible parameter space.
+$\lambda{=}0.3$), $r^*_{\text{auto/HITL}}{=}0.80$. From Eq.~\eqref{eq:threshold},
+$c_{\text{err}} \to \infty$ implies $r^*_{\text{auto/HITL}} \to 1$, whereas
+$b \gg c_{\text{err}}$ gives
+$r^*_{\text{auto/HITL}} \approx 1-(c_{\text{analyst}}+\lambda)/b$.
+These limits are interpretable only when the resulting boundary lies in $[0,1]$ and the
+calibration and utility assumptions hold.
 
 \begin{algorithm}[!t]
 \caption{PC3 -- Human Validation and Hallucination Control}
@@ -625,14 +625,15 @@ was constructed via a four-step procedure: ontology alignment, double coding by 
 coders, inter-rater reconciliation, and conflict resolution for competing requirements
 (e.g., LGPD erasure vs. sectoral retention). Full mapping in the supplementary TSV (OP7).
 
-Three observations arise from inspection of Table~\ref{tab:mapping}. First, LGPD coverage
-is achieved through controls that are already required by ISO 27001 (A.5.28 for audit logs,
-A.5.34 for privacy) and NIST CSF 2.0 (PR.PT-1, PR.DS-1): there is no LGPD-specific control
-that adds operational burden beyond what the international standards already require.
-This \emph{regulatory co-incident} simplifies compliance for organizations already certified
-to ISO 27001. Second, the OWASP LLM Top 10 \cite{owasp2025llm} maps to precisely the L4
-layer controls (LLM01/input, LLM02/output, LLM06/tool access, LLM07/audit, LLM09/retrieval),
-confirming that the layer decomposition partitions the risk taxonomy without gaps or overlaps.
+Three observations arise from inspection of Table~\ref{tab:mapping}. First, several technical
+controls associated here with selected LGPD obligations overlap with ISO 27001 (A.5.28 for
+audit logs, A.5.34 for privacy) and NIST CSF 2.0 (PR.PT-1, PR.DS-1). This overlap may reduce
+duplicate implementation work, but it does not establish LGPD compliance or eliminate
+LGPD-specific legal and organizational obligations such as lawful basis, purpose limitation,
+data minimization, retention, and data-subject rights. Second, the OWASP LLM Top 10
+\cite{owasp2025llm} maps primarily to the proposed L4 controls (LLM01/input, LLM02/output,
+LLM06/tool access, LLM07/audit, LLM09/retrieval). The mapping is a design traceability aid,
+not evidence that the layer decomposition is exhaustive or non-overlapping.
 Third, the ATLAS adversarial ML taxonomy \cite{mitre2025atlas} covers L3 and L4 controls
 (retrieval manipulation AML.T0043, prompt injection AML.T0051, tool poisoning AML.T0048,
 output manipulation AML.T0050, HITL bypass mitigation AML.M0011) but has no entries in the
@@ -669,8 +670,8 @@ Identity/Zero-Trust  & T1078  & n/a       & PR.AC-1 & LLM02 & A3  & A.5.15 & 8.2
 \includegraphics[width=\columnwidth]{F7_mapping_heatmap.png}
 \caption{Cross-standard control coverage heatmap. Rows are SHIELD-AI controls; columns
 are the seven standards. Darker cells indicate stronger (explicit article/clause-level)
-alignment. LGPD coverage is achieved through controls already required by ISO 27001
-and NIST CSF 2.0.}
+alignment. Several technical controls mapped to selected LGPD obligations overlap with
+ISO 27001 and NIST CSF 2.0; the heatmap does not establish legal compliance.}
 \label{fig:heatmap}
 \end{figure}
 
@@ -682,12 +683,12 @@ priority of traceability for sensitive data processing decisions.
 \subsection{Properties and Proofs}
 \label{ssec:properties}
 
-\begin{lemma}[Audit Completeness]
+\begin{lemma}[Decision-Trace Completeness under Engineering Invariants]
 \label{lem:audit}
-Under audit invariant $\mathcal{A}$ and three engineering invariants---%
+Under audit invariant $\mathcal{A}$ and three engineering invariants:
 \textbf{E1} append-only persistence (WORM/immutable schema),
 \textbf{E2} cryptographic chaining (Merkle-style with HSM signing),
-\textbf{E3} time-monotone clock with bounded skew $\delta$---%
+\textbf{E3} time-monotone clock with bounded skew $\delta$,
 every $d \in \mathcal{D}$ emitted with route $\in \{\text{AUTO},\text{HITL},\text{REJECT}\}$
 has an audit record $a$ containing sufficient information to reconstruct $d$, including the
 originating input, prompt, graph path, output, reliability quadruple, and routing decision.
@@ -696,11 +697,13 @@ originating input, prompt, graph path, output, reliability quadruple, and routin
 By construction of PC3 (Alg.~\ref{alg:pc3}), every audit record is the tuple
 $\langle$input, prompt, graph\_path, output, $\theta,\sigma,\gamma,\gamma',\rho$,
 route, analyst, timestamp$\rangle$.
-E1 prevents loss; E2 prevents undetected tampering
-(Merkle-proof verification cost is $O(\log n)$); E3 prevents reordering attacks.
+Under the stated premises, E1 excludes record loss, E2 makes modification of committed records
+detectable (Merkle inclusion-proof verification costs $O(\log n)$), and E3 constrains reordering.
+The result is conditional: it does not by itself discharge crash consistency, privileged
+truncation, rollback, key compromise, or external-checkpoint availability.
 \end{proof}
 
-\begin{theorem}[Compliance Preservation under Control Composition]
+\begin{theorem}[Selected-Control Coverage Monotonicity under Non-Interference]
 \label{thm:compliance}
 Let $c_1, c_2 \in \mathcal{C}$ with LGPD coverage $\geq \alpha$ each. If
 $\mathrm{NonInterf}(c_1, c_2)$ (i.e., $\mathrm{Req}(c_1) \subseteq \mathrm{Req}(c_1 \circ c_2)$)
@@ -710,37 +713,40 @@ holds, then $\mathrm{LGPD\text{-}coverage}(c_1 \circ c_2) \geq \alpha$.
 By the non-interference precondition, $\mathrm{Req}(c_1) \subseteq \mathrm{Req}(c_1 \circ c_2)$.
 Let $L \subseteq \mathrm{Req}(c_1)$ be the LGPD Articles 46--48 subset \cite{lgpd2018}.
 Then $L \subseteq \mathrm{Req}(c_1 \circ c_2)$, hence coverage is preserved.
-Conflicting requirements (LGPD erasure vs. retention) lie outside the non-interference
-precondition and are resolved by a precedence lattice
-(data-subject rights $>$ life-safety $>$ sector retention $>$ contractual SLAs).
+Conflicting requirements (e.g., erasure and sectoral retention) lie outside the
+non-interference precondition and require case-specific legal and organizational resolution.
+Accordingly, the theorem concerns set coverage in the crosswalk, not legal compliance or
+control effectiveness.
 \end{proof}
 
-\begin{theorem}[Policy-Derivable HITL Routing]
+\begin{theorem}[Policy-Derivable AUTO/HITL Boundary]
 \label{thm:routing}
 Given cost-benefit parameters $(b, c_{\text{err}}, c_{\text{analyst}}, \lambda, c_{\text{miss}})$
-and reliability $R$, the optimal action under expected-utility maximization is determined by the
-thresholds in Eq.~\eqref{eq:threshold}: thresholds are functions of organizational policy,
-not ad-hoc constants.
+and reliability score $R$, Eq.~\eqref{eq:threshold} determines the pairwise indifference
+boundary between AUTO and HITL. The complete action selected by Algorithm~\ref{alg:pc3}
+also depends on the policy-specified REJECT threshold, deny list, sensitivity set, and signal
+disagreement rules.
 \end{theorem}
 
 % =====================================================================
 \section{Reference Implementation}
 \label{sec:implementation}
 
-\subsection{Package Structure}
-The SHIELD-AI reference implementation is organized as a Python package with one module
-per layer. The five core modules are:
+\subsection{Prototype Scope and Package Structure}
+The public prototype is a four-module surrogate used to exercise ingestion, simulated
+LLM/RAG scoring, routing, and local audit verification. It does not yet instantiate the full
+six-layer architecture: in particular, the released version does not implement UCO conformance,
+multi-hop GraphRAG, a production LLM, or an independently calibrated $\rho$. The modules are:
 
 \begin{itemize}[noitemsep,leftmargin=1em]
   \item \texttt{layer1\_ingest.py} -- L1 Data Fabric: SIEM/EDR log normalization, PII gate,
     and feature extraction to the CICFlowMeter-compatible 24-feature schema.
-  \item \texttt{layer2\_llm\_rag.py} -- L2/L3 combined: UCO Knowledge Graph construction,
-    GraphRAG multi-hop traversal (Definitions~\ref{def:kg}--\ref{def:graphrag}),
-    and LLM prompt assembly with retrieved context.
-  \item \texttt{layer3\_hitl.py} -- L4/L5: reliability quadruple computation, PC3
-    routing (Algorithm~\ref{alg:pc3}), and HITL queue management.
-  \item \texttt{layer4\_audit.py} -- L6: HMAC-signed record append, Merkle batch
-    commitment, and chain verification.
+  \item \texttt{layer2\_llm\_rag.py} -- simulated LLM/RAG classification derived from
+    Random-Forest priors, lexical ATT\&CK retrieval, and a reliability triple.
+  \item \texttt{layer3\_hitl.py} -- threshold-based AUTO/HITL/REJECT routing over the
+    surrogate reliability score.
+  \item \texttt{layer4\_audit.py} -- local HMAC hash-chain append, Merkle batch
+    commitments, and verification.
   \item \texttt{run\_experiment.py} -- end-to-end pipeline runner: synthetic dataset
     generation (CICIDS-2017-like), full-pipeline inference, metric aggregation,
     and Merkle chain verification.
@@ -749,90 +755,55 @@ per layer. The five core modules are:
 \subsection{Design Decisions}
 Three implementation choices reflect the framework's dependability requirements.
 
-\emph{Immutable record store.} The L6 audit store is implemented as an append-only
-log file with per-record HMAC-256 signatures keyed to a deployment secret stored
-in an OS-level secrets store (Keychain on macOS, libsecret on Linux). Merkle roots
-are committed synchronously at batch boundaries, enabling gap detection without
-requiring a running verifier process.
+\emph{Prototype audit store.} The released L6 surrogate writes JSONL output and applies
+per-record HMAC-SHA-256 plus local Merkle batch commitments. This demonstrates record
+integrity checks in the reference run; it does not implement WORM persistence, HSM-backed
+key custody, trusted time, or externally witnessed checkpoints. These are deployment
+requirements for the stronger invariants used by Lemma~\ref{lem:audit}.
 
-\emph{Stateless inference.} Each SHIELD-AI inference call is stateless: the reliability
-quadruple, routing decision, and audit record are fully determined by the current alert
-and the current LLM output, without reference to session state. This design supports
+\emph{Stateless surrogate inference.} Each prototype call is stateless: the reliability
+triple, routing decision, and audit record are determined by the current synthetic alert
+and simulated classifier output, without reference to session state. This design supports
 horizontal scaling and eliminates the state-synchronization risks identified as hidden
 technical debt in ML pipelines \cite{sculley2015hidden}.
 
-\emph{Structured LLM output.} The L4 LLM is prompted with a structured JSON output
-schema enforcing the fields: \texttt{verdict}, \texttt{technique}, \texttt{confidence},
-\texttt{rationale}, and \texttt{evidence\_path}. Structured output parsing occurs before
-the reliability quadruple is computed, ensuring that malformed outputs trigger a REJECT
-route rather than producing a partially-initialized quadruple that could bypass the
-adversarial-uncertainty HITL rule.
+\emph{Production-interface requirement.} The architectural design requires a structured
+LLM output with \texttt{verdict}, \texttt{technique}, \texttt{confidence},
+\texttt{rationale}, and \texttt{evidence\_path}. The current surrogate does not test malformed
+production-LLM output; schema validation and fail-closed routing therefore remain requirements
+for the six-layer implementation rather than evaluated properties of this prototype.
 
-\subsection{L6 Audit Layer: Core Implementation}
-Listing~\ref{lst:audit} presents the core HMAC-signed record append and Merkle batch
-commitment logic from \texttt{layer4\_audit.py}. The implementation is self-contained and
-depends only on Python's \texttt{hashlib} and \texttt{hmac} standard library modules,
-ensuring reproducibility without external dependencies.
+\subsection{Experiment Figures}
 
-\begin{figure}[t]
-\begin{lstlisting}[language=Python, caption={SHIELD-AI L6 core: HMAC-signed record
-append and Merkle batch commitment (\texttt{layer4\_audit.py}, excerpt).},
-label=lst:audit]
-import hashlib, hmac, json, time
-from typing import Any
+Fig.~\ref{fig:confusion} shows the row-normalised confusion matrix. The principal
+failure modes are intra-family confusions: DoS variants (slowloris, Slowhttptest, GoldenEye)
+exchange $\leq 8\%$ of instances among themselves, and Web Attack sub-types (Brute Force,
+XSS, SQLi) account for similar intra-family leakage. These classes also carry the lowest
+$\gamma'$ values (Fig.~\ref{fig:triple}), which means PC3 routes them predominantly to
+HITL -- the intended dependability behaviour: classification uncertainty is surfaced to an
+analyst rather than auto-resolved.
 
-class AuditLog:
-    def __init__(self, secret: bytes, batch_size: int = 1024):
-        self._secret = secret
-        self._batch_size = batch_size
-        self._records: list[dict] = []
-        self._roots:   list[str]  = []
-        self._prev_hmac = b"0" * 32          # chain anchor
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{E4_routing_ieee.png}
+\caption{E4 -- PC3 routing distribution per attack class (attack flows only, seed 42).
+HIGH-confidence classes (DDoS, DoS Hulk) are auto-resolved at $\geq 53\%$; semantically
+ambiguous or low-frequency classes (PortScan, SSH-Patator, Bot) are escalated to HITL
+at rates $\geq 79\%$. The dashed vertical line marks the AUTO share threshold (70\%).}
+\label{fig:routing}
+\end{figure}
 
-    def _sign(self, payload: bytes) -> str:
-        return hmac.new(self._secret, payload, hashlib.sha256).hexdigest()
-
-    def append(self, record: dict[str, Any]) -> str:
-        record["ts"]   = time.monotonic_ns()
-        record["prev"] = self._prev_hmac.hex()
-        raw = json.dumps(record, sort_keys=True).encode()
-        sig = self._sign(raw)
-        record["sig"]  = sig
-        self._prev_hmac = bytes.fromhex(sig)
-        self._records.append(record)
-        if len(self._records) % self._batch_size == 0:
-            self._commit_batch()
-        return sig
-
-    def _commit_batch(self) -> str:
-        leaves = [r["sig"] for r in self._records[-self._batch_size:]]
-        root   = self._merkle_root(leaves)
-        self._roots.append(root)
-        return root
-
-    @staticmethod
-    def _merkle_root(leaves: list[str]) -> str:
-        layer = [hashlib.sha256(l.encode()).hexdigest() for l in leaves]
-        while len(layer) > 1:
-            if len(layer) % 2:
-                layer.append(layer[-1])
-            layer = [hashlib.sha256((a + b).encode()).hexdigest()
-                     for a, b in zip(layer[::2], layer[1::2])]
-        return layer[0]
-
-    def verify_chain(self) -> bool:
-        prev = b"0" * 32
-        for r in self._records:
-            check = dict(r)
-            sig   = check.pop("sig")
-            check["prev"] = prev.hex()
-            raw   = json.dumps(check, sort_keys=True).encode()
-            expected = hmac.new(self._secret, raw, hashlib.sha256).hexdigest()
-            if not hmac.compare_digest(sig, expected):
-                return False
-            prev = bytes.fromhex(sig)
-        return True
-\end{lstlisting}
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{E6_triple_ieee.png}
+\caption{E6 -- Mean reliability triple $\langle\theta,\sigma,\gamma'\rangle$ per class
+(test set, seed 42). Self-consistency $\sigma$ is uniformly high across classes because
+the classifier prior is stable at temperature 0.45. Confidence $\theta$ tracks per-class
+recall. Adversarial groundedness $\gamma'$ is the principal differentiator: DDoS reaches
+$\gamma'{\approx}0.78$ while PortScan drops to ${\approx}0.72$ and Bot to ${\approx}0.26$,
+driving the routing distribution in Fig.~\ref{fig:routing}. The dashed line marks
+$r^*_{\mathrm{auto}}{=}0.80$.}
+\label{fig:triple}
 \end{figure}
 
 \subsection{Reproducibility Artifacts}
@@ -935,20 +906,22 @@ thresholds tune the latency penalty $\lambda$ to OT availability constraints
 \cite{nsa2024deploying}.
 
 In OT/SCADA environments, $c_{\text{err}}$ becomes a physical-safety parameter
-(downtime cost per minute $\times$ expected incident duration); Theorem~\ref{thm:routing}
-guarantees that the derived $r^*_{\text{auto}}$ is policy-optimal under those domain-specific
-values without modifying the routing algorithm. The L6 Merkle log provides the evidence chain
-required for ANPD incident notification within 72 hours, with PII flag (L1), sensitivity
-assessment (L4), and analyst classification (L5) as verifiable fields; P2 ensures that
-adding ANPD-specific controls can only increase coverage.
+(downtime cost per minute $\times$ expected incident duration); Eq.~\eqref{eq:threshold}
+allows the AUTO/HITL boundary to be recomputed under those domain-specific values without
+modifying the routing algorithm. Subject to implementation of the stated persistence and
+access-control requirements, the L6 record can support evidence collection for incident
+communication. Resolution CD/ANPD 15/2024 requires communication to the ANPD and affected
+data subjects within three business days when its applicability conditions are met
+\cite{anpd15}; it does not impose a generic 72-hour rule. P2 states only that adding a
+non-interfering mapped control does not reduce selected requirement coverage.
 
 % =====================================================================
 \section{Comparison with Related Frameworks}
 \label{sec:comparison}
 
 \subsection{Criteria and Scope}
-We compare SHIELD-AI against five governance artifacts that represent the state of the art
-in AI/LLM governance for cybersecurity: ENISA Multilayer Framework \cite{enisa2023multilayer},
+We compare SHIELD-AI against five adjacent governance artifacts selected for their coverage
+of AI/LLM governance and cybersecurity: ENISA Multilayer Framework \cite{enisa2023multilayer},
 Layered Governance Architecture (LGA) \cite{lga2026}, LanG \cite{lang2026},
 NIST AI RMF 1.0 \cite{nist2023airmf}, and ISO/IEC 42001:2023 \cite{iso42001}.
 Eight comparison criteria are derived from the research questions: (C1)~SOC operational
@@ -987,7 +960,8 @@ C8: Reproducible exp.   & \checkmark & $\times$ & $\times$ & \checkmark & $\time
 Table~\ref{tab:comparison} reveals that no existing framework satisfies more than four
 of the eight criteria. The largest gaps are in SOC operational specificity (C1), formal
 property proofs (C5), and LGPD coverage (C7) -- the three dimensions that motivated
-SHIELD-AI's design.
+SHIELD-AI's design. Because the criteria derive from this paper's research questions and the
+coding is author-conducted, the scores should not be interpreted as an independent ranking.
 
 LGA and LanG come closest on HITL and LLM risk modeling, which reflects their origin as
 agentic AI governance artifacts; their gap is the absence of regulatory compliance mapping
@@ -997,12 +971,12 @@ ISO 42001 provide management-level risk frameworks that are complementary to SHI
 they define \emph{what} to govern, while SHIELD-AI specifies \emph{how} to govern it
 operationally inside a SOC pipeline.
 
-The ``Formal proofs'' row (C5) warrants particular attention from the TDSC perspective.
-Audit completeness (P1), compliance preservation (P2), and policy-derivable routing
-(P3) are the three dependability properties that transform SHIELD-AI from an engineering
-proposal into an assurance argument. None of the compared frameworks provides equivalent
-formal guarantees, limiting their usefulness in contexts where certification bodies or
-regulatory auditors require proof, not just process documentation.
+The ``Formal properties'' row (C5) warrants particular attention from the TDSC perspective.
+Decision-trace completeness under E1--E3 (P1), selected-control coverage monotonicity under
+non-interference (P2), and the policy-derived AUTO/HITL boundary (P3) structure the proposed
+assurance argument. Their assumption burden and implementation status must be assessed
+alongside their formal statements; the comparison does not establish certification or
+regulatory superiority over the other artifacts.
 
 % =====================================================================
 \section{Evaluation}
@@ -1012,7 +986,8 @@ regulatory auditors require proof, not just process documentation.
 
 \begin{table}[!t]
 \renewcommand{\arraystretch}{1.2}
-\caption{Scenario evaluation (author-assigned Likert 1--5; protocol pre-registered).}
+\caption{Author-scored scenario walkthrough (Likert 1--5). Scores illustrate internal design
+coverage and are not an independent validation.}
 \label{tab:scenarioscores}
 \centering
 \scriptsize
@@ -1050,10 +1025,13 @@ $\lambda{=}0.3$). L6 appended each decision to an HMAC-signed log batched into M
 of size 1024. Experiments ran on a commodity laptop (Apple M-series, 16~GiB RAM, no GPU).
 
 \textbf{Headline results.} Table~\ref{tab:exp-headline} reports the binary attack/benign
-performance, routing distribution, and audit invariants. SHIELD-AI matches the Random Forest
-baseline within statistical noise (F1~$0.984$ vs.~$0.985$; AUC~$0.998$ vs.~$0.999$) while
-additionally producing the reliability quadruple and the Merkle audit chain that the baselines
-do not provide. The rule-based detector requires a $\sim$94$\times$ higher FPR at equal F1.
+performance, routing distribution, and local audit checks. In this single seed/split, the
+surrogate produces F1~$0.984$ versus $0.985$ and AUC~$0.998$ versus $0.999$ for the Random
+Forest baseline. No inferential or non-inferiority conclusion follows from these point
+estimates. The rule-based detector has a substantially higher observed FPR (0.375 versus
+0.004), but also a much lower F1 (0.516 versus 0.984), so this is not a matched-F1 comparison.
+The surrogate additionally emits reliability signals, routing decisions, and a locally
+verifiable audit chain.
 At aggregate level SHIELD-AI auto-resolves 69.0\% of decisions, escalates 29.7\% to analysts,
 and safely rejects 1.3\%.
 
@@ -1071,41 +1049,22 @@ Routing refers to PC3 (AUTO/HITL/REJECT). Audit: chain verified for all $15{,}00
 \midrule
 Rule-based       & 0.516 & 0.375 & 0.750 & 0.121 & n/a \\
 Random Forest    & 0.985 & 0.004 & 0.999 & 0.513 & n/a \\
-SHIELD-AI (full) & 0.984 & 0.004 & 0.998 & 0.497 & 69/30/1\% \\
+SHIELD-AI surrogate & 0.984 & 0.004 & 0.998 & 0.497 & 69/30/1\% \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\begin{figure}[!t]
-\centering
-\includegraphics[width=0.88\columnwidth]{F6_roc_comparison.png}
-\caption{ROC curves for rule-based, Random Forest, and SHIELD-AI full pipeline on the
-synthetic CICIDS-2017-like test set ($n{=}15{,}000$, seed 42). SHIELD-AI and RF overlap
-at AUC~0.998/0.999; the rule-based detector degrades to AUC~0.750.}
-\label{fig:roc}
-\end{figure}
+\textbf{Key observations.} $\gamma'$ (mean 0.575, $p_{10}$=0.255, $p_{90}$=0.766) is the
+principal routing differentiator (Fig.~\ref{fig:triple}): DDoS reaches $\gamma'{\approx}0.78$
+while PortScan drops below 0.72, producing the class-stratified routing shown in
+Fig.~\ref{fig:routing}. L6 audit latency averages 0.014~ms/record; chain re-derivation passes
+for all 15{,}000 records, and tamper tests detect a single bit-flip in any record.
 
-Fig.~\ref{fig:roc} visualizes the ROC comparison across configurations. SHIELD-AI matches
-the RF baseline across all operating points, confirming that the governance overhead (HITL
-routing, audit logging) incurs no detection-quality penalty.
-
-\textbf{Key observations.} (1) The adversarial-aware groundedness $\gamma'$ (mean 0.575,
-$p_{50}$=0.570, $p_{10}$=0.255, $p_{90}$=0.766) is the principal differentiator in PC3
-routing: classes with clean ATT\&CK lexical alignment (DDoS$\to$T1498) reach
-$\gamma' \in [0.70, 0.85]$; PortScan ($\to$T1046 ``Network Service Discovery'') receives
-lower $\gamma'$ and is routed predominantly to HITL -- the intended behavior for
-ambiguous labels. (2) L6 audit latency averages 0.014~ms/record, well within a 50~ms budget.
-(3) Chain re-derivation passes for all 15{,}000 records; tamper tests (unit test
-\texttt{test\_audit\_chain.py}) detect a single bit-flip in any record's predicted label.
-
-\textbf{Per-class routing analysis.}
-Table~\ref{tab:hitl-class} details how PC3 routing distributes across attack classes,
-illustrating the framework's dependability behavior: high-confidence classes (DDoS, DoS
-variants) are predominantly auto-resolved, while semantically ambiguous or low-frequency
-classes (Bot, SSH-Patator, PortScan, Infiltration) are escalated to HITL at rates
-exceeding 75\%. This behavior is \emph{emergent} from the reliability quadruple rather
-than hand-coded per class, demonstrating that the decision-theoretic threshold generalizes
-across heterogeneous attack categories without per-class tuning.
+\textbf{Per-class routing.} Fig.~\ref{fig:routing} shows the PC3 distribution across all
+attack classes. High-confidence families (DDoS, DoS Hulk) reach AUTO rates $\geq 53\%$;
+rare and semantically ambiguous classes (PortScan, SSH-Patator, Bot, Infiltration) are
+escalated to HITL at rates $\geq 79\%$, consistent with the intended dependability behaviour.
+Estimates for rare classes are especially uncertain given small support counts.
 
 \begin{table}[!t]
 \renewcommand{\arraystretch}{1.15}
@@ -1157,71 +1116,28 @@ SHIELD-AI layer.}
 RF-only (no SHIELD-AI)   & 0.985 & 0.004 & n/a  & 0.00 \\
 + L6 audit (no routing)  & 0.985 & 0.004 & n/a  & 1.00 \\
 + PC3 routing (L4/L5)    & 0.984 & 0.004 & 30.7 & 1.00 \\
-+ GraphRAG ($\rho$, L3)  & 0.984 & 0.004 & 29.7 & 1.00 \\
++ simulated $\rho$ signal  & 0.984 & 0.004 & 29.7 & 1.00 \\
 \midrule
-SHIELD-AI full pipeline  & 0.984 & 0.004 & 29.7 & 1.00 \\
+Four-module surrogate  & 0.984 & 0.004 & 29.7 & 1.00 \\
 \bottomrule
 \end{tabular}}
 \end{table}
 
-The ablation reveals that L6 audit incurs zero performance cost (identical F1/FPR),
-confirming that the Merkle-chain overhead is fully absorbed in the asynchronous batch
-path. PC3 routing increases the HITL queue by 30.7\% relative to the no-routing
-baseline; adding GraphRAG slightly reduces this to 29.7\% because $\rho$ provides
-additional high-confidence signal for DDoS and DoS classes, moving a small number
-of borderline cases from HITL to AUTO. The F1 difference between RF-only and
-SHIELD-AI full pipeline (0.985 vs.\ 0.984) is within experimental variance (95\% CI
-overlapping), indicating that SHIELD-AI's governance overhead does not degrade
-detection quality.
+In this run, adding the local audit path leaves F1/FPR unchanged; this observation does not
+imply zero compute, storage, or durability cost. PC3 routes 30.7\% of cases to HITL in the
+triple-only configuration. The row labelled ``GraphRAG'' uses a simulated additional
+confidence signal rather than the full UCO/multi-hop engine specified in
+Section~\ref{ssec:graphrag}; it reduces the observed HITL share to 29.7\%. The F1 difference
+between RF-only and the surrogate pipeline (0.985 versus 0.984) is a point-estimate result.
+Repeated seeds, paired tests, and confidence intervals are required to assess variance or
+non-inferiority.
 
 \textbf{Scope and limitations.} This is a reproducible reference experiment, not a field
 trial: the LLM is simulated by perturbed RF priors; the synthetic generator preserves
 CICIDS-2017 schema but not adversarial co-evolution; absolute threshold values must be
 re-calibrated against a production LLM before deployment. Full code, generator, baselines,
 audit log, and figure scripts released under Apache~2.0 at the companion repository
-(DOI to be added on camera-ready per OP7).
-
-\subsection{Per-Class Detection Metrics}
-Table~\ref{tab:perclass} presents precision, recall, and F1 for each attack class in the
-SHIELD-AI full pipeline, providing fine-grained visibility into detection quality across
-the threat taxonomy.
-
-\begin{table}[!t]
-\renewcommand{\arraystretch}{1.15}
-\caption{Per-class binary detection metrics -- SHIELD-AI full pipeline (test set, $n{=}15{,}000$, seed 42).}
-\label{tab:perclass}
-\centering
-\scriptsize
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{lrrr}
-\toprule
-\textbf{Attack Class} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\
-\midrule
-DDoS                    & 0.998 & 0.999 & 0.999 \\
-DoS Hulk                & 0.997 & 0.994 & 0.995 \\
-PortScan                & 0.994 & 0.997 & 0.996 \\
-DoS GoldenEye           & 0.993 & 0.990 & 0.991 \\
-DoS slowloris           & 0.992 & 0.985 & 0.988 \\
-DoS Slowhttptest        & 0.991 & 0.983 & 0.987 \\
-FTP-Patator             & 0.983 & 0.975 & 0.979 \\
-SSH-Patator             & 0.980 & 0.970 & 0.975 \\
-Web Attack -- Brute Force & 0.961 & 0.943 & 0.952 \\
-Web Attack -- XSS       & 0.943 & 0.912 & 0.927 \\
-Bot                     & 0.928 & 0.895 & 0.911 \\
-Web Attack -- SQL Inj.  & 0.895 & 0.842 & 0.868 \\
-Infiltration            & 0.857 & 0.786 & 0.820 \\
-Heartbleed              & 0.833 & 0.750 & 0.789 \\
-\midrule
-\textbf{BENIGN (macro)} & 0.990 & 0.996 & 0.993 \\
-\bottomrule
-\end{tabular}}
-\end{table}
-
-Low-frequency, semantically ambiguous classes (Infiltration, Heartbleed, SQLi) show the
-largest precision-recall gap, consistent with the sparse ATT\&CK coverage for those
-techniques. These are precisely the classes routed to HITL at rates $\geq$64\%
-(Table~\ref{tab:hitl-class}), confirming that PC3 correctly identifies and escalates
-the cases where the model is least reliable.
+(a DOI-pinned release remains future work; see OP7).
 
 \subsection{Threat Model and Security Analysis}
 \label{ssec:threatmodel}
@@ -1243,6 +1159,11 @@ and a gap-detection verifier (PC5) that detects missing records. The formal proo
 (Lemma~\ref{lem:audit}) guarantees tamper evidence under E1-E3; residual risk is
 log-key compromise, which is outside the framework scope and delegated to the SOC's
 key management infrastructure.
+A cross-layer supply-chain threat also applies: a compromised CTI feed at L1 can
+inject false IOC associations that propagate into the L2 Knowledge Graph, inflating
+$\rho$ for malicious edges and bypassing the adversarial-uncertainty HITL rule.
+Mitigation requires content-hash pinning of all corpus snapshots at ingestion time
+and periodic cross-validation of graph edges against a second authoritative source.
 
 \subsection{Threats to Validity}
 Following \cite{wohlin2012experimentation}: \emph{Construct} -- framework concepts may not
@@ -1251,15 +1172,21 @@ capture all SOC governance dimensions (mitigated by multi-source grounding). \em
 threat intel). \emph{External} -- two scenarios limit generalizability (mitigated by spanning
 healthcare and government; further sectors as future work). \emph{Conclusion} -- ENISA
 comparison is qualitative (explicit criteria matrix with declared limitations).
+A further conclusion threat is surrogate validity: the four-module prototype exercises
+the routing and audit logic but not the UCO conformance, multi-hop GraphRAG, or
+production-LLM path; quantitative results therefore speak to the surrogate's behavior
+rather than to the full six-layer architecture, and any extrapolation to field performance
+requires independent evaluation on live traffic.
 
 % =====================================================================
 \section{Discussion}
 \label{sec:discussion}
 
 \subsection{Implications for Practitioners}
-Principal finding: integrated governance is feasible and aligns with multi-standard compliance
-simultaneously. Practitioners should prioritize L6 (audit, compliance) and L5 (HITL) before
-scaling L4 (LLM/RAG) autonomy -- a sequencing that inverts the ``add AI first, govern later''
+The prototype suggests that governance controls can be integrated into a common processing
+pipeline; it does not establish simultaneous legal compliance. Practitioners should establish
+auditable decision traces and meaningful human oversight before scaling LLM/RAG autonomy,
+a sequencing that inverts the ``add AI first, govern later''
 pattern documented for 63\% of organizations \cite{ibm2025costbreach}.
 
 From a dependability perspective, three deployment recommendations follow directly from
@@ -1269,44 +1196,62 @@ tamper-evident trail from day one. Second, \emph{calibrate thresholds per enviro
 $r^*_{\text{auto}} = 0.80$ is derived from cost parameters that vary significantly
 across SOC tiers (Tier-1 MSSPs vs.\ in-house government SOCs); operators should
 re-derive the threshold using their own $b$, $c_{\text{err}}$, and analyst cost
-estimates before production rollout. Third, \emph{treat HITL escalation rate as a KPI}:
-an escalation rate below 10\% suggests over-confident routing (threshold too low),
-while a rate above 60\% indicates insufficient RAG corpus coverage -- both are
-detectable through L6 aggregate statistics without requiring ground-truth labels.
+estimates before production rollout. Third, \emph{monitor HITL workload and outcomes}:
+escalation rate, queue delay, analyst agreement, overrides, and error rates conditional on
+AUTO/HITL/REJECT should be evaluated together. Escalation rate alone cannot diagnose
+overconfidence or corpus insufficiency without ground-truth and calibration evidence.
+Fourth, \emph{maintain the RAG corpus actively}: the $\gamma'$ signal depends on the
+freshness and coverage of the ATT\&CK knowledge base; a corpus that has not been updated
+for major ATT\&CK or ATLAS releases will suppress $\gamma'$ for recently discovered
+techniques, increasing HITL load precisely for the classes where rapid automated
+triage carries the highest operational value.
 
-\subsection{Dependability Properties in Practice}
-The three formally proved properties (P1 audit completeness, P2 compliance preservation,
-P3 policy-derivable routing) translate directly into operational assurance arguments.
-P1 enables post-incident forensics: any SOC decision can be reconstructed from the
-Merkle-chained log without relying on live system state.
-P2 provides a monotonicity guarantee for compliance auditors: adding a control to the
-mapping never decreases coverage, eliminating the need to re-audit the full standard
-mapping when new controls are introduced.
+\subsection{Dependability Properties and Deployment Obligations}
+The three conditional properties (P1 decision-trace completeness, P2 selected-control
+coverage monotonicity, and P3 policy-derived AUTO/HITL boundary) define operational
+assurance obligations rather than field-validated guarantees.
+P1 specifies the fields needed for post-incident reconstruction when E1--E3 are implemented;
+the released surrogate does not yet discharge all three invariants.
+P2 provides set-coverage monotonicity under non-interference; it does not eliminate legal
+review or the need to re-evaluate implementation effectiveness when mappings change.
 P3 decouples governance policy from implementation: changing the cost model
 (e.g., increasing analyst cost to reflect shift shortages) automatically propagates
 to the routing threshold without code changes, supporting governance agility under
 operational variability.
 
 \subsection{Acknowledged Limitations}
-Seven limitations are explicitly acknowledged:
+Nine limitations are explicitly acknowledged:
 (A1) The contribution is an integration, not a creation of new risks or controls.
 (A2) HITL cost parameters $(b, c_{\text{err}}, \ldots)$ are policy choices with order-of-magnitude
 uncertainty; Theorem~\ref{thm:routing} guarantees policy-derivable routing, not optimal routing.
-(A3) L6 staffing assumes mid-to-large SOCs; a ``L6-light'' variant for small SOCs is future work.
-(A4) LLM version drift shifts the empirical distribution of $(\theta, \sigma, \gamma, \rho)$.
+(A3) L6 staffing assumes mid-to-large SOCs; a ``L6-light'' variant for small SOCs -- using
+sampling-based audit rather than full WORM persistence -- is an open engineering problem.
+(A4) LLM version drift shifts the empirical distribution of $(\theta, \sigma, \gamma, \rho)$;
+each major model update requires re-running the reliability regression suite before promotion.
 (A5) Single-agent semantics; multi-agent cascading \cite{owasp2025agentic} requires extension.
 (A6) Vishing is upstream of SOC ingestion and outside L1's scope.
 (A7) \emph{Compliance theater}: adoption without operationalized KPIs is an explicit risk.
+(A8) The public experiment is a four-module surrogate and does not instantiate the six-layer
+UCO/GraphRAG architecture or a production LLM.
+(A9) Quantitative results use one synthetic dataset generation, one 75/25 split, and seed 42;
+they do not quantify training/sampling uncertainty or establish non-inferiority.
 
 \subsection{Complexity and Scalability Analysis}
 \label{ssec:complexity}
 Inference cost is dominated by three operations: L3 GraphRAG traversal ($O(d^k)$ for $k{\leq}3$
 hops, $d{<}50$, sub-second at $|V|{\sim}10^4$); L4 LLM inference (linear in bounded 2000-token
-prompt); and L6 audit ($O(1)$ HMAC per record, asynchronous $O(B\log B)$ Merkle batch).
+prompt); and L6 audit ($O(1)$ HMAC per record, asynchronous $O(B)$ Merkle-tree construction
+for a batch of $B$ leaves).
 At $P{=}16$ parallel LLM calls with $t_{\text{LLM}}{=}1.2$~s, throughput reaches
 ${\sim}13$~alerts/s -- sufficient for mid-tier SOCs ingesting ${<}10^6$~alerts/day.
 The 69\% AUTO routing rate means most alerts never reach L4, providing inherent burst
 absorption without additional infrastructure.
+Failover behavior under L4 unavailability is governed by the PC3 REJECT branch:
+when the LLM path is unreachable, the deny-list and sensitivity rules still route
+high-severity alerts to HITL, preserving analyst visibility even in degraded mode.
+This fail-closed design satisfies the availability--safety trade-off required in
+critical-infrastructure SOC deployments where partial operation is preferable to
+silent failure.
 
 \subsection{Research Agenda}
 \label{ssec:agenda}
@@ -1314,6 +1259,10 @@ Nine open problems frame the forward research programme.
 \textbf{OP1 -- Operational validation.}
 Live SOC validation via historical-incident replay with a MSSP or national CSIRT would provide
 empirical ground truth for PC3 routing thresholds beyond the synthetic benchmark.
+Key metrics to instrument include per-class HITL rate, analyst override frequency,
+time-to-decision, and post-incident L6 reconstruction completeness; together they would
+establish whether surrogate thresholds transfer to real traffic distributions and whether
+the Merkle-chained audit log supports regulatory reporting without manual reconstruction.
 \textbf{OP2 -- Multi-agent adversarial dynamics.}
 Extending the formal model to multi-agent semantics \cite{owasp2025agentic,lga2026} --
 with explicit trust labels per inter-agent message -- is required before SHIELD-AI can
@@ -1347,21 +1296,34 @@ in a controlled SOC lab, combined with a Compliance Theater Index KPI measuring 
 between declared controls and operationalized behavior, would stress-test L4 controls
 and address limitation A7.
 
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=\textwidth]{E2_confusion_ieee.png}
+\caption{E2 -- Row-normalised confusion matrix for the SHIELD-AI surrogate across 15 classes
+($n{=}15{,}000$ test flows, seed 42). Diagonal values are per-class recall.
+Confusions concentrate within attack families (DoS variants; Web Attack sub-types).
+Rare classes (Infiltration, Heartbleed, SQLi) show the largest off-diagonal mass and are
+correspondingly routed to HITL at rates $\geq 64\%$ (Fig.~\ref{fig:routing}).}
+\label{fig:confusion}
+\end{figure*}
+
 % =====================================================================
 \section{Conclusion}
 \label{sec:conclusion}
 
 \subsection*{Summary of Contributions}
-SHIELD-AI integrates a dual-use GenAI taxonomy, a probabilistic risk model with reliability
+SHIELD-AI specifies a dual-use GenAI taxonomy, a risk model with reliability
 quadruple $\langle\theta,\sigma,\gamma,\rho\rangle$, a six-layer reference architecture with
 HITL as architectural primitive and a GraphRAG Correlation Engine grounded in UCO, and a
-cross-standard control mapping across seven standards including LGPD. We formalize the
-framework as a 6-tuple, derive HITL thresholds from cost-benefit principles, and prove audit
-completeness, compliance preservation, and policy-derivable routing. The calibration bound
-breaks under prompt injection; L4 controls restore its applicability. Scenario analysis in
-healthcare and critical infrastructure demonstrates transferability. A reproducible reference
-experiment confirms end-to-end operation with F1~0.984, AUC~0.998, and verified Merkle audit
-chain.
+cross-standard control mapping including selected LGPD obligations. We formalize the
+framework as a 6-tuple, derive the AUTO/HITL boundary from cost-benefit parameters, and state
+conditional properties for decision-trace completeness, selected-control coverage, and
+policy-derived routing. Interpreting the reliability score probabilistically requires empirical
+calibration, especially under prompt injection. The healthcare and critical-infrastructure
+scenarios illustrate prospective applicability but do not demonstrate transferability. The
+synthetic component-level experiment demonstrates execution of a four-module surrogate
+(F1~0.984; AUC~0.998) and local audit-chain verification; it does not validate a production
+LLM, UCO/GraphRAG implementation, field effectiveness, or adversarial robustness.
 
 \subsection*{Dependability Argument}
 Framed in the taxonomy of \cite{avizienis2004dependability}, SHIELD-AI provides:
@@ -1369,20 +1331,21 @@ Framed in the taxonomy of \cite{avizienis2004dependability}, SHIELD-AI provides:
 \emph{fault tolerance} through PC3 HITL escalation, which prevents LLM errors from
 propagating into SOC response actions; and \emph{fault removal} through L6 Merkle-chained
 audit logs, which provide a tamper-evident trail for post-incident reconstruction and
-systematic failure analysis. The three formal properties (P1-P3) are the assurance claims
-that underpin this argument: P1 guarantees that fault-removal evidence is complete,
-P2 guarantees that compliance coverage is monotone under control additions, and P3
-guarantees that fault-tolerance thresholds are policy-derivable rather than ad hoc.
-Together, they transform SHIELD-AI from an engineering reference architecture into a
-verifiable dependability argument suitable for certification and regulatory audit contexts.
+systematic failure analysis. The three formal properties (P1-P3) organize the assurance
+argument, subject to their stated premises: P1 gives decision-trace completeness when E1--E3
+hold; P2 gives monotonic selected-requirement coverage under non-interference; and P3 derives
+the AUTO/HITL boundary from policy parameters. They do not, by themselves, establish
+production durability, legal compliance, global three-action optimality, certification
+readiness, or regulatory acceptance. Independent implementation and evaluation are required
+to discharge those assurance obligations.
 
 \subsection*{Limitations and Forward View}
-Seven limitations are acknowledged (A1-A7, Section~\ref{sec:discussion}). The most
-consequential for TDSC readers is A4 (LLM version drift): the reliability quadruple
-is calibrated against a specific LLM family and version; updating the LLM requires
-re-calibrating the quadruple, a process not yet formalized as a versioned upgrade
-protocol. This limitation motivates OP8 in the research agenda, which calls for
-empirical calibration across LLM families. The nine-item research agenda (OP1-OP9)
+Nine limitations are acknowledged (A1--A9, Section~\ref{sec:discussion}). The most
+consequential for the present evidence is A8: the public experiment is a four-module
+surrogate rather than an implementation of the complete six-layer architecture. A4 further
+notes that production-LLM version drift would shift the empirical distribution of the
+reliability signals and require recalibration. These limitations motivate OP1, OP8, and OP9.
+The nine-item research agenda (OP1--OP9)
 provides a structured roadmap for extending SHIELD-AI from a reference architecture
 to an operationally validated, multi-jurisdictional, adversarially evaluated framework
 for dependable GenAI governance in security operations.
@@ -1413,9 +1376,9 @@ Python code scaffolding for the SHIELD-AI pipeline
 \texttt{layer4\_audit.py}) and the end-to-end experiment runner
 (\texttt{run\_experiment.py}), \LaTeX{} formatting, and bibliography organisation.
 This use is disclosed in accordance with IEEE's Authorship and AI Policy (IEEE TDSC).
-All scientific contributions --- including the SHIELD-AI framework design, the
+All scientific contributions, including the SHIELD-AI framework design, the
 six-layer reference architecture, formal definitions and proofs, the PC3 routing
-algorithm, experimental methodology, data analysis, and conclusions --- are the sole
+algorithm, experimental methodology, data analysis, and conclusions, are the sole
 responsibility of the human authors.
 The reference experiment (Section~\ref{sec:eval}) was executed by automated scripts
 without LLM involvement in data collection or scoring.
